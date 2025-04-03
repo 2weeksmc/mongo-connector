@@ -22,10 +22,10 @@ public class ServerModel {
         Document document = new Document();
         document.put("ownerId", ownerId.toString());
         document.put("start", Instant.now());
-        document.put("weeks", serverObject.get("weeks").asString());
-        document.put("max-players", serverObject.get("max-players").asInteger());
-        document.put("max-memory", serverObject.get("max-memory").asInteger());
-        document.put("plugins", serverObject.get("plugins").asJsonArray());
+        document.put("weeks", serverObject.getConverted("weeks").asInteger());
+        document.put("max-players", serverObject.getConverted("max-players").asInteger());
+        document.put("max-memory", serverObject.getConverted("max-memory").asInteger());
+        document.put("plugins", serverObject.getConverted("plugins").asJsonArray());
         return this.connector.getServerCollection().insertOne(document).wasAcknowledged();
     }
 
