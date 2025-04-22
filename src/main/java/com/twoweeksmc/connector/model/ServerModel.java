@@ -16,9 +16,6 @@ public class ServerModel {
     }
 
     public boolean addServer(UUID ownerId, JsonObject serverObject) {
-        if (this.getServer(ownerId) != null) {
-            return true;
-        }
         Document document = new Document();
         document.put("ownerId", ownerId.toString());
         document.put("start", Instant.now());

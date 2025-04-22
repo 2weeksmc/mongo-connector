@@ -37,6 +37,11 @@
             <artifactId>json</artifactId>
             <version>1.0-BETA1.indev5</version>
         </dependency>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
     </dependencies>
 
 </project>
