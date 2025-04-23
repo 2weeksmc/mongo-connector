@@ -15,9 +15,9 @@ public class ServerModel {
         this.connector = connector;
     }
 
-    public boolean addServer(UUID ownerId, JsonObject serverObject) {
+    public boolean createServer(JsonObject serverObject) {
         Document document = new Document();
-        document.put("ownerId", ownerId.toString());
+        document.put("ownerId", serverObject.getConverted("ownerId").asString());
         document.put("start", Instant.now());
         document.put("weeks", serverObject.getConverted("weeks").asInteger());
         document.put("max-players", serverObject.getConverted("max-players").asInteger());

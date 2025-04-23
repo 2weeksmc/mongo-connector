@@ -45,7 +45,7 @@ public class UserModel {
         for (JsonObject update : updates) {
             boolean success = this.connector.getUserCollection().updateOne(
                     Filters.eq("username", username), new Document("$set",
-                            new Document(update.getConverted("key").asString(), update.getConverted("value").asString())
+                            new Document(update.getConverted("key").asString(), update.getConverted("value").asObject())
                     )
             ).wasAcknowledged();
             if (!success) {

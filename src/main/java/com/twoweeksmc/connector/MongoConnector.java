@@ -2,6 +2,7 @@ package com.twoweeksmc.connector;
 
 import com.twoweeksmc.connector.model.UserModel;
 import com.twoweeksmc.connector.model.ServerModel;
+import lombok.Getter;
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;
@@ -11,8 +12,10 @@ import com.mongodb.client.MongoDatabase;
 
 import de.eztxm.ezlib.config.JsonConfig;
 
+@Getter
 public class MongoConnector {
     private final MongoClient mongoClient;
+    private final MongoDatabase mongoDatabase;
     private final MongoCollection<Document> serverCollection;
     private final MongoCollection<Document> userCollection;
     private final UserModel userModel;
@@ -27,30 +30,18 @@ public class MongoConnector {
                 + ":" + databaseConfiguration.get("port").asString()
                 + "/?authSource=" + databaseConfiguration.get("database").asString()
         );
-        MongoDatabase mongoDatabase = this.mongoClient.getDatabase(databaseConfiguration.get("database").asString());
-        this.serverCollection = mongoDatabase.getCollection("servers");
-        this.userCollection = mongoDatabase.getCollection("users");
+        this.mongoDatabase = this.mongoClient.getDatabase(databaseConfiguration.get("database").asString());
+        this.serverCollection = this.getOrCreateCollection("servers");
+        this.userCollection = this.getOrCreateCollection("users");
         this.userModel = new UserModel(this);
         this.serverModel = new ServerModel(this);
     }
 
-    public ServerModel getServerModel() {
-        return serverModel;
-    }
-
-    public UserModel getUserModel() {
-        return userModel;
-    }
-
-    public MongoCollection<Document> getUserCollection() {
-        return userCollection;
-    }
-
-    public MongoCollection<Document> getServerCollection() {
-        return serverCollection;
-    }
-
-    public MongoClient getMongoClient() {
-        return mongoClient;
+    public MongoCollection<Document> getOrCreateCollection(String collectionName) {
+        boolean exists = this.mongoDatabase.listCollectionNames()
+                .into(new java.util.ArrayList<>())
+                .contains(collectionName);
+        if (!exists) this.mongoDatabase.createCollection(collectionName);
+        return this.mongoDatabase.getCollection(collectionName);
     }
 }
